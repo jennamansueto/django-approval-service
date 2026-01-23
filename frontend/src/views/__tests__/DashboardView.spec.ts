@@ -23,7 +23,4 @@ describe('DashboardView', () => {
     expect(wrapper.find('h1').text()).toBe('Dashboard')
   })
 
-  // INTENTIONAL GAP: No test for loading state
-  // INTENTIONAL GAP: No test for displaying approvals
-  // INTENTIONAL GAP: No test for empty state
 })

@@ -63,7 +63,3 @@ class TestDeliverableViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    # INTENTIONAL GAP: No test for create deliverable
-    # INTENTIONAL GAP: No test for viewer permissions
-    # INTENTIONAL GAP: No test for submit action
-    # INTENTIONAL GAP: No test for submit validation

@@ -24,6 +24,4 @@ describe('StatusBadge', () => {
     expect(wrapper.attributes('style')).toContain('background-color: #e74c3c')
   })
 
-  // INTENTIONAL GAP: No test for PENDING status
-  // INTENTIONAL GAP: No test for unknown status fallback
 })

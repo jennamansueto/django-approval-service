@@ -42,6 +42,3 @@ class TestClientViewSet:
         assert len(response.data) == 1
         assert response.data[0]['name'] == 'Test Client'
 
-    # INTENTIONAL GAP: No test for create client
-    # INTENTIONAL GAP: No test for unauthenticated access
-    # INTENTIONAL GAP: No test for update/delete

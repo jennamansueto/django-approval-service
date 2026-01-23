@@ -35,6 +35,4 @@ describe('DeliverablesView', () => {
     expect(wrapper.find('.btn-primary').text()).toContain('New Deliverable')
   })
 
-  // INTENTIONAL GAP: No test for form submission
-  // INTENTIONAL GAP: No test for submit deliverable action
 })

@@ -45,6 +45,3 @@ class TestAuditEventViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    # INTENTIONAL GAP: No test for filtering by object_type
-    # INTENTIONAL GAP: No test for filtering by object_id
-    # INTENTIONAL GAP: No test for unauthenticated access

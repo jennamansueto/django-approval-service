@@ -80,7 +80,3 @@ class TestApprovalRequestViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
 
-    # INTENTIONAL GAP: No test for approve endpoint
-    # INTENTIONAL GAP: No test for reject endpoint
-    # INTENTIONAL GAP: No test for approving already approved request
-    # INTENTIONAL GAP: No test for planner trying to approve (permission check)

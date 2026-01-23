@@ -31,5 +31,3 @@ class TestAuditEventModel:
         assert event.verb == 'created'
         assert event.object_type == 'Deliverable'
 
-    # INTENTIONAL GAP: No test for AuditEvent str representation
-    # INTENTIONAL GAP: No test for audit event without actor (null actor)

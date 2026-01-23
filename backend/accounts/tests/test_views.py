@@ -39,5 +39,3 @@ class TestLoginView:
         assert response.data['username'] == 'testuser'
         assert response.data['role'] == 'PLANNER'
 
-    # INTENTIONAL GAP: No test for invalid credentials
-    # INTENTIONAL GAP: No tests for /me endpoint
