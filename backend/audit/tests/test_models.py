@@ -1,0 +1,35 @@
+"""Tests for audit models."""
+import pytest
+
+from accounts.models import User
+from audit.models import AuditEvent
+
+
+@pytest.fixture
+def user():
+    """Create a test user."""
+    return User.objects.create_user(
+        username='testuser',
+        email='test@example.com',
+        password='testpass123',
+    )
+
+
+@pytest.mark.django_db
+class TestAuditEventModel:
+    """Tests for AuditEvent model."""
+
+    def test_create_audit_event(self, user):
+        """Test creating an audit event."""
+        event = AuditEvent.objects.create(
+            actor=user,
+            verb='created',
+            object_type='Deliverable',
+            object_id='1',
+            payload={'title': 'Test'},
+        )
+        assert event.verb == 'created'
+        assert event.object_type == 'Deliverable'
+
+    # INTENTIONAL GAP: No test for AuditEvent str representation
+    # INTENTIONAL GAP: No test for audit event without actor (null actor)
