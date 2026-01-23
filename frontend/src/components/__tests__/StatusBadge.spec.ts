@@ -14,14 +14,14 @@ describe('StatusBadge', () => {
     const wrapper = mount(StatusBadge, {
       props: { status: 'APPROVED' },
     })
-    expect(wrapper.attributes('style')).toContain('background-color: rgb(39, 174, 96)')
+    expect(wrapper.attributes('style')).toContain('background-color: #27ae60')
   })
 
   it('applies correct color for REJECTED status', () => {
     const wrapper = mount(StatusBadge, {
       props: { status: 'REJECTED' },
     })
-    expect(wrapper.attributes('style')).toContain('background-color: rgb(231, 76, 60)')
+    expect(wrapper.attributes('style')).toContain('background-color: #e74c3c')
   })
 
   // INTENTIONAL GAP: No test for PENDING status
