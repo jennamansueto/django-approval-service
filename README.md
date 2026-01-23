@@ -1,6 +1,6 @@
 # Approval & Sign-Off Workflow Service
 
-A demo application for managing approval workflows for deliverables in an enterprise environment.
+An application for managing approval workflows for deliverables in an enterprise environment.
 
 ## Tech Stack
 
@@ -97,31 +97,6 @@ npm test
 ```
 
 ## Known Issues & Future Improvements
-
-### Django 3.2 → 4.2 Upgrade Path
-
-This project intentionally uses Django 3.2 to demonstrate an upgrade path. Key changes needed for 4.2:
-
-1. **`USE_L10N` setting** - Deprecated in Django 4.0, remove from settings
-2. **`default_app_config`** - No longer needed in Django 3.2+
-3. **`url()` patterns** - Already using `path()`, no changes needed
-4. **Time zone handling** - Review `USE_TZ` settings
-
-### Test Coverage Gaps (Intentional)
-
-The following areas have intentionally low test coverage for demonstration:
-
-**Backend:**
-- `approvals/views.py` - No tests for reject endpoint, permission edge cases
-- `audit/` - Minimal tests, no filtering tests
-- `accounts/permissions.py` - Permission classes not fully tested
-
-**Frontend:**
-- No tests for error states or loading states
-- No tests for form submissions
-- No integration tests
-
-### Other Known Issues
 
 1. **No CSRF handling in frontend** - Session auth works but CSRF token not passed
 2. **No pagination** - API returns all results
