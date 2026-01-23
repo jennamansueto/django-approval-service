@@ -1,5 +1,6 @@
 """Audit event model."""
 from django.conf import settings
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 
 
@@ -16,7 +17,7 @@ class AuditEvent(models.Model):
     verb = models.CharField(max_length=50)
     object_type = models.CharField(max_length=50)
     object_id = models.CharField(max_length=50)
-    payload = models.JSONField(default=dict, blank=True)
+    payload = JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
