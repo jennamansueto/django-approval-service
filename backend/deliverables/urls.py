@@ -1,5 +1,5 @@
 """URL configuration for deliverables app."""
-from django.conf.urls import include, url
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from .views import DeliverableViewSet
@@ -8,5 +8,5 @@ router = DefaultRouter()
 router.register('', DeliverableViewSet, basename='deliverable')
 
 urlpatterns = [
-    url(r'^', include(router.urls)),
+    path('', include(router.urls)),
 ]

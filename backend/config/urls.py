@@ -1,12 +1,12 @@
 """URL configuration for approval service project."""
-from django.conf.urls import include, url
+from django.urls import include, path
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^api/auth/', include('accounts.urls')),
-    url(r'^api/clients/', include('clients.urls')),
-    url(r'^api/deliverables/', include('deliverables.urls')),
-    url(r'^api/approvals/', include('approvals.urls')),
-    url(r'^api/audit/', include('audit.urls')),
+    path('admin/', admin.site.urls),
+    path('api/auth/', include('accounts.urls')),
+    path('api/clients/', include('clients.urls')),
+    path('api/deliverables/', include('deliverables.urls')),
+    path('api/approvals/', include('approvals.urls')),
+    path('api/audit/', include('audit.urls')),
 ]
