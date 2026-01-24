@@ -16,6 +16,17 @@ def api_client():
 
 
 @pytest.fixture
+def admin_user():
+    """Create an admin user."""
+    return User.objects.create_user(
+        username='admin',
+        email='admin@example.com',
+        password='testpass123',
+        role=User.ADMIN,
+    )
+
+
+@pytest.fixture
 def approver_user():
     """Create an approver user."""
     return User.objects.create_user(
@@ -34,6 +45,17 @@ def planner_user():
         email='planner@example.com',
         password='testpass123',
         role=User.PLANNER,
+    )
+
+
+@pytest.fixture
+def viewer_user():
+    """Create a viewer user."""
+    return User.objects.create_user(
+        username='viewer',
+        email='viewer@example.com',
+        password='testpass123',
+        role=User.VIEWER,
     )
 
 
@@ -79,4 +101,124 @@ class TestApprovalRequestViewSet:
         response = api_client.get('/api/approvals/')
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
+
+    def test_unauthenticated_cannot_list_approvals(self, api_client, approval_request):
+        """Test unauthenticated user cannot list approvals."""
+        response = api_client.get('/api/approvals/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_unauthenticated_cannot_approve(self, api_client, approval_request):
+        """Test unauthenticated user cannot approve requests."""
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_unauthenticated_cannot_reject(self, api_client, approval_request):
+        """Test unauthenticated user cannot reject requests."""
+        response = api_client.post(f'/api/approvals/{approval_request.id}/reject/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_viewer_can_list_approvals(self, api_client, viewer_user, approval_request):
+        """Test VIEWER role can list approval requests (read-only)."""
+        api_client.force_authenticate(user=viewer_user)
+        response = api_client.get('/api/approvals/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_planner_can_list_approvals(self, api_client, planner_user, approval_request):
+        """Test PLANNER role can list approval requests."""
+        api_client.force_authenticate(user=planner_user)
+        response = api_client.get('/api/approvals/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_viewer_cannot_approve_requests(self, api_client, viewer_user, approval_request):
+        """Test VIEWER role cannot approve requests."""
+        api_client.force_authenticate(user=viewer_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_planner_cannot_approve_requests(self, api_client, planner_user, approval_request):
+        """Test PLANNER role cannot approve requests."""
+        api_client.force_authenticate(user=planner_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_viewer_cannot_reject_requests(self, api_client, viewer_user, approval_request):
+        """Test VIEWER role cannot reject requests."""
+        api_client.force_authenticate(user=viewer_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/reject/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_planner_cannot_reject_requests(self, api_client, planner_user, approval_request):
+        """Test PLANNER role cannot reject requests."""
+        api_client.force_authenticate(user=planner_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/reject/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_approver_can_approve_requests(self, api_client, approver_user, approval_request):
+        """Test APPROVER role can approve requests."""
+        api_client.force_authenticate(user=approver_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_approver_can_reject_requests(self, api_client, approver_user, client_obj, planner_user):
+        """Test APPROVER role can reject requests."""
+        deliverable = Deliverable.objects.create(
+            title='Reject Test Deliverable',
+            client=client_obj,
+            created_by=planner_user,
+            status=Deliverable.SUBMITTED,
+        )
+        request = ApprovalRequest.objects.create(
+            deliverable=deliverable,
+            requested_by=planner_user,
+        )
+        ApprovalStep.objects.create(
+            approval_request=request,
+            step_order=1,
+            assigned_role=ApprovalStep.ROLE_APPROVER,
+        )
+        api_client.force_authenticate(user=approver_user)
+        response = api_client.post(f'/api/approvals/{request.id}/reject/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_admin_can_approve_requests(self, api_client, admin_user, client_obj, planner_user):
+        """Test ADMIN role can approve requests."""
+        deliverable = Deliverable.objects.create(
+            title='Admin Approve Test Deliverable',
+            client=client_obj,
+            created_by=planner_user,
+            status=Deliverable.SUBMITTED,
+        )
+        request = ApprovalRequest.objects.create(
+            deliverable=deliverable,
+            requested_by=planner_user,
+        )
+        ApprovalStep.objects.create(
+            approval_request=request,
+            step_order=1,
+            assigned_role=ApprovalStep.ROLE_APPROVER,
+        )
+        api_client.force_authenticate(user=admin_user)
+        response = api_client.post(f'/api/approvals/{request.id}/approve/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_admin_can_reject_requests(self, api_client, admin_user, client_obj, planner_user):
+        """Test ADMIN role can reject requests."""
+        deliverable = Deliverable.objects.create(
+            title='Admin Reject Test Deliverable',
+            client=client_obj,
+            created_by=planner_user,
+            status=Deliverable.SUBMITTED,
+        )
+        request = ApprovalRequest.objects.create(
+            deliverable=deliverable,
+            requested_by=planner_user,
+        )
+        ApprovalStep.objects.create(
+            approval_request=request,
+            step_order=1,
+            assigned_role=ApprovalStep.ROLE_APPROVER,
+        )
+        api_client.force_authenticate(user=admin_user)
+        response = api_client.post(f'/api/approvals/{request.id}/reject/')
+        assert response.status_code == status.HTTP_200_OK
 
