@@ -43,7 +43,7 @@ class TestApprovalRequestModel:
             deliverable=deliverable,
             requested_by=user,
         )
-        assert request.status == ApprovalRequest.Status.PENDING
+        assert request.status == ApprovalRequest.PENDING
         assert request.deliverable == deliverable
 
     def test_approval_request_str(self, deliverable, user):

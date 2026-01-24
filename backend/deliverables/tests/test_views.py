@@ -21,7 +21,7 @@ def planner_user():
         username='planner',
         email='planner@example.com',
         password='testpass123',
-        role=User.Role.PLANNER,
+        role=User.PLANNER,
     )
 
 
@@ -32,7 +32,7 @@ def viewer_user():
         username='viewer',
         email='viewer@example.com',
         password='testpass123',
-        role=User.Role.VIEWER,
+        role=User.VIEWER,
     )
 
 

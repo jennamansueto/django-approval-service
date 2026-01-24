@@ -22,7 +22,7 @@ def approver_user():
         username='approver',
         email='approver@example.com',
         password='testpass123',
-        role=User.Role.APPROVER,
+        role=User.APPROVER,
     )
 
 
@@ -33,7 +33,7 @@ def planner_user():
         username='planner',
         email='planner@example.com',
         password='testpass123',
-        role=User.Role.PLANNER,
+        role=User.PLANNER,
     )
 
 
@@ -50,7 +50,7 @@ def deliverable(client_obj, planner_user):
         title='Test Deliverable',
         client=client_obj,
         created_by=planner_user,
-        status=Deliverable.Status.SUBMITTED,
+        status=Deliverable.SUBMITTED,
     )
 
 
@@ -64,7 +64,7 @@ def approval_request(deliverable, planner_user):
     ApprovalStep.objects.create(
         approval_request=request,
         step_order=1,
-        assigned_role=ApprovalStep.AssignedRole.APPROVER,
+        assigned_role=ApprovalStep.ROLE_APPROVER,
     )
     return request
 

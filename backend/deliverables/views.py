@@ -31,13 +31,13 @@ class DeliverableViewSet(viewsets.ModelViewSet):
         """Submit a deliverable for approval."""
         deliverable = self.get_object()
 
-        if deliverable.status != Deliverable.Status.DRAFT:
+        if deliverable.status != Deliverable.DRAFT:
             return Response(
                 {'error': 'Only draft deliverables can be submitted'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        deliverable.status = Deliverable.Status.SUBMITTED
+        deliverable.status = Deliverable.SUBMITTED
         deliverable.save()
 
         approval_request = ApprovalRequest.objects.create(
@@ -48,7 +48,7 @@ class DeliverableViewSet(viewsets.ModelViewSet):
         ApprovalStep.objects.create(
             approval_request=approval_request,
             step_order=1,
-            assigned_role=ApprovalStep.AssignedRole.APPROVER,
+            assigned_role=ApprovalStep.ROLE_APPROVER,
         )
 
         AuditEvent.objects.create(

@@ -7,11 +7,17 @@ from django.utils.translation import ugettext_lazy as _
 class ApprovalRequest(models.Model):
     """A request for approval of a deliverable."""
 
-    class Status(models.TextChoices):
-        PENDING = 'PENDING', 'Pending'
-        APPROVED = 'APPROVED', 'Approved'
-        REJECTED = 'REJECTED', 'Rejected'
-        CANCELED = 'CANCELED', 'Canceled'
+    PENDING = 'PENDING'
+    APPROVED = 'APPROVED'
+    REJECTED = 'REJECTED'
+    CANCELED = 'CANCELED'
+
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+        (CANCELED, 'Canceled'),
+    )
 
     deliverable = models.ForeignKey(
         'deliverables.Deliverable',
@@ -25,8 +31,8 @@ class ApprovalRequest(models.Model):
     )
     status = models.CharField(
         max_length=20,
-        choices=Status.choices,
-        default=Status.PENDING,
+        choices=STATUS_CHOICES,
+        default=PENDING,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     decided_at = models.DateTimeField(null=True, blank=True)
@@ -44,16 +50,27 @@ class ApprovalRequest(models.Model):
 class ApprovalStep(models.Model):
     """An individual step in an approval workflow."""
 
-    class Status(models.TextChoices):
-        PENDING = 'PENDING', 'Pending'
-        APPROVED = 'APPROVED', 'Approved'
-        REJECTED = 'REJECTED', 'Rejected'
-        SKIPPED = 'SKIPPED', 'Skipped'
+    STEP_PENDING = 'PENDING'
+    STEP_APPROVED = 'APPROVED'
+    STEP_REJECTED = 'REJECTED'
+    STEP_SKIPPED = 'SKIPPED'
 
-    class AssignedRole(models.TextChoices):
-        APPROVER = 'APPROVER', 'Approver'
-        FINANCE = 'FINANCE', 'Finance'
-        LEGAL = 'LEGAL', 'Legal'
+    STEP_STATUS_CHOICES = (
+        (STEP_PENDING, 'Pending'),
+        (STEP_APPROVED, 'Approved'),
+        (STEP_REJECTED, 'Rejected'),
+        (STEP_SKIPPED, 'Skipped'),
+    )
+
+    ROLE_APPROVER = 'APPROVER'
+    ROLE_FINANCE = 'FINANCE'
+    ROLE_LEGAL = 'LEGAL'
+
+    ROLE_CHOICES = (
+        (ROLE_APPROVER, 'Approver'),
+        (ROLE_FINANCE, 'Finance'),
+        (ROLE_LEGAL, 'Legal'),
+    )
 
     approval_request = models.ForeignKey(
         ApprovalRequest,
@@ -63,13 +80,13 @@ class ApprovalStep(models.Model):
     step_order = models.PositiveIntegerField(default=1)
     assigned_role = models.CharField(
         max_length=20,
-        choices=AssignedRole.choices,
-        default=AssignedRole.APPROVER,
+        choices=ROLE_CHOICES,
+        default=ROLE_APPROVER,
     )
     status = models.CharField(
         max_length=20,
-        choices=Status.choices,
-        default=Status.PENDING,
+        choices=STEP_STATUS_CHOICES,
+        default=STEP_PENDING,
     )
     decided_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,

@@ -6,16 +6,22 @@ from django.db import models
 class User(AbstractUser):
     """Custom user model with role field."""
 
-    class Role(models.TextChoices):
-        ADMIN = 'ADMIN', 'Admin'
-        PLANNER = 'PLANNER', 'Planner'
-        APPROVER = 'APPROVER', 'Approver'
-        VIEWER = 'VIEWER', 'Viewer'
+    ADMIN = 'ADMIN'
+    PLANNER = 'PLANNER'
+    APPROVER = 'APPROVER'
+    VIEWER = 'VIEWER'
+
+    ROLE_CHOICES = (
+        (ADMIN, 'Admin'),
+        (PLANNER, 'Planner'),
+        (APPROVER, 'Approver'),
+        (VIEWER, 'Viewer'),
+    )
 
     role = models.CharField(
         max_length=20,
-        choices=Role.choices,
-        default=Role.VIEWER,
+        choices=ROLE_CHOICES,
+        default=VIEWER,
     )
 
     class Meta:

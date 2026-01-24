@@ -8,7 +8,7 @@ class IsAdminUser(permissions.BasePermission):
     """Allow access only to admin users."""
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role == User.Role.ADMIN
+        return request.user.is_authenticated and request.user.role == User.ADMIN
 
 
 class IsAdminOrPlanner(permissions.BasePermission):
@@ -17,7 +17,7 @@ class IsAdminOrPlanner(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-        return request.user.role in [User.Role.ADMIN, User.Role.PLANNER]
+        return request.user.role in [User.ADMIN, User.PLANNER]
 
 
 class IsAdminOrApprover(permissions.BasePermission):
@@ -26,7 +26,7 @@ class IsAdminOrApprover(permissions.BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
-        return request.user.role in [User.Role.ADMIN, User.Role.APPROVER]
+        return request.user.role in [User.ADMIN, User.APPROVER]
 
 
 class IsViewerOrAbove(permissions.BasePermission):

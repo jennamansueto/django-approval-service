@@ -33,27 +33,27 @@ class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
         """Approve an approval request."""
         approval_request = self.get_object()
 
-        if approval_request.status != ApprovalRequest.Status.PENDING:
+        if approval_request.status != ApprovalRequest.PENDING:
             return Response(
                 {'error': 'Only pending requests can be approved'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        approval_request.status = ApprovalRequest.Status.APPROVED
+        approval_request.status = ApprovalRequest.APPROVED
         approval_request.decided_at = timezone.now()
         approval_request.save()
 
         pending_step = approval_request.steps.filter(
-            status=ApprovalStep.Status.PENDING
+            status=ApprovalStep.STEP_PENDING
         ).first()
         if pending_step:
-            pending_step.status = ApprovalStep.Status.APPROVED
+            pending_step.status = ApprovalStep.STEP_APPROVED
             pending_step.decided_by = request.user
             pending_step.decided_at = timezone.now()
             pending_step.save()
 
         deliverable = approval_request.deliverable
-        deliverable.status = Deliverable.Status.APPROVED
+        deliverable.status = Deliverable.APPROVED
         deliverable.save()
 
         AuditEvent.objects.create(
@@ -71,27 +71,27 @@ class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
         """Reject an approval request."""
         approval_request = self.get_object()
 
-        if approval_request.status != ApprovalRequest.Status.PENDING:
+        if approval_request.status != ApprovalRequest.PENDING:
             return Response(
                 {'error': 'Only pending requests can be rejected'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        approval_request.status = ApprovalRequest.Status.REJECTED
+        approval_request.status = ApprovalRequest.REJECTED
         approval_request.decided_at = timezone.now()
         approval_request.save()
 
         pending_step = approval_request.steps.filter(
-            status=ApprovalStep.Status.PENDING
+            status=ApprovalStep.STEP_PENDING
         ).first()
         if pending_step:
-            pending_step.status = ApprovalStep.Status.REJECTED
+            pending_step.status = ApprovalStep.STEP_REJECTED
             pending_step.decided_by = request.user
             pending_step.decided_at = timezone.now()
             pending_step.save()
 
         deliverable = approval_request.deliverable
-        deliverable.status = Deliverable.Status.REJECTED
+        deliverable.status = Deliverable.REJECTED
         deliverable.save()
 
         AuditEvent.objects.create(

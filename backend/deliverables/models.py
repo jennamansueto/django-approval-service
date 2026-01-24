@@ -7,11 +7,17 @@ from django.utils.translation import ugettext_lazy as _
 class Deliverable(models.Model):
     """A deliverable that can be submitted for approval."""
 
-    class Status(models.TextChoices):
-        DRAFT = 'DRAFT', 'Draft'
-        SUBMITTED = 'SUBMITTED', 'Submitted'
-        APPROVED = 'APPROVED', 'Approved'
-        REJECTED = 'REJECTED', 'Rejected'
+    DRAFT = 'DRAFT'
+    SUBMITTED = 'SUBMITTED'
+    APPROVED = 'APPROVED'
+    REJECTED = 'REJECTED'
+
+    STATUS_CHOICES = (
+        (DRAFT, 'Draft'),
+        (SUBMITTED, 'Submitted'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+    )
 
     title = models.CharField(_(u'title'), max_length=255)
     description = models.TextField(_(u'description'), blank=True)
@@ -22,8 +28,8 @@ class Deliverable(models.Model):
     )
     status = models.CharField(
         max_length=20,
-        choices=Status.choices,
-        default=Status.DRAFT,
+        choices=STATUS_CHOICES,
+        default=DRAFT,
     )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,

@@ -20,7 +20,7 @@ class Command(BaseCommand):
             username='admin',
             defaults={
                 'email': 'admin@example.com',
-                'role': User.Role.ADMIN,
+                'role': User.ADMIN,
                 'is_staff': True,
                 'is_superuser': True,
             }
@@ -32,7 +32,7 @@ class Command(BaseCommand):
             username='planner',
             defaults={
                 'email': 'planner@example.com',
-                'role': User.Role.PLANNER,
+                'role': User.PLANNER,
             }
         )
         planner.set_password('planner123')
@@ -42,7 +42,7 @@ class Command(BaseCommand):
             username='approver',
             defaults={
                 'email': 'approver@example.com',
-                'role': User.Role.APPROVER,
+                'role': User.APPROVER,
             }
         )
         approver.set_password('approver123')
@@ -52,7 +52,7 @@ class Command(BaseCommand):
             username='viewer',
             defaults={
                 'email': 'viewer@example.com',
-                'role': User.Role.VIEWER,
+                'role': User.VIEWER,
             }
         )
         viewer.set_password('viewer123')
@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 'description': 'Quarterly financial summary report for Q1 2026',
                 'client': acme,
                 'created_by': planner,
-                'status': Deliverable.Status.DRAFT,
+                'status': Deliverable.DRAFT,
             }
         )
 
@@ -84,7 +84,7 @@ class Command(BaseCommand):
                 'description': 'Annual compliance and regulatory report',
                 'client': globex,
                 'created_by': planner,
-                'status': Deliverable.Status.SUBMITTED,
+                'status': Deliverable.SUBMITTED,
             }
         )
 
@@ -94,26 +94,26 @@ class Command(BaseCommand):
                 'description': 'Comprehensive risk assessment for fiscal year 2026',
                 'client': initech,
                 'created_by': planner,
-                'status': Deliverable.Status.APPROVED,
+                'status': Deliverable.APPROVED,
             }
         )
 
         self.stdout.write(self.style.SUCCESS('Created deliverables'))
 
         # Create approval request for submitted deliverable
-        if d2.status == Deliverable.Status.SUBMITTED:
+        if d2.status == Deliverable.SUBMITTED:
             ar, created = ApprovalRequest.objects.get_or_create(
                 deliverable=d2,
                 defaults={
                     'requested_by': planner,
-                    'status': ApprovalRequest.Status.PENDING,
+                    'status': ApprovalRequest.PENDING,
                 }
             )
             if created:
                 ApprovalStep.objects.create(
                     approval_request=ar,
                     step_order=1,
-                    assigned_role=ApprovalStep.AssignedRole.APPROVER,
+                    assigned_role=ApprovalStep.ROLE_APPROVER,
                 )
 
         self.stdout.write(self.style.SUCCESS('Created approval requests'))

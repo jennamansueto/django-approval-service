@@ -35,7 +35,7 @@ class TestDeliverableModel:
             created_by=user,
         )
         assert deliverable.title == 'Q1 Report'
-        assert deliverable.status == Deliverable.Status.DRAFT
+        assert deliverable.status == Deliverable.DRAFT
 
     def test_deliverable_str(self, user, client_obj):
         """Test deliverable string representation."""

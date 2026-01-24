@@ -17,7 +17,7 @@ class TestUserModel:
         )
         assert user.username == 'testuser'
         assert user.email == 'test@example.com'
-        assert user.role == User.Role.VIEWER  # default role
+        assert user.role == User.VIEWER  # default role
 
     def test_create_user_with_role(self):
         """Test creating a user with specific role."""
@@ -25,9 +25,9 @@ class TestUserModel:
             username='planner',
             email='planner@example.com',
             password='testpass123',
-            role=User.Role.PLANNER,
+            role=User.PLANNER,
         )
-        assert user.role == User.Role.PLANNER
+        assert user.role == User.PLANNER
 
     def test_user_str(self):
         """Test user string representation."""
@@ -35,6 +35,6 @@ class TestUserModel:
             username='admin',
             email='admin@example.com',
             password='testpass123',
-            role=User.Role.ADMIN,
+            role=User.ADMIN,
         )
         assert str(user) == 'admin (ADMIN)'

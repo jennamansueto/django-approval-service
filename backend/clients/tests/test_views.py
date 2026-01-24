@@ -20,7 +20,7 @@ def admin_user():
         username='admin',
         email='admin@example.com',
         password='testpass123',
-        role=User.Role.ADMIN,
+        role=User.ADMIN,
     )
 
 
