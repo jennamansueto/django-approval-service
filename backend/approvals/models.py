@@ -1,6 +1,7 @@
 """Approval models."""
 from django.conf import settings
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class ApprovalRequest(models.Model):
@@ -33,6 +34,8 @@ class ApprovalRequest(models.Model):
     class Meta:
         db_table = 'approval_requests'
         ordering = ['-created_at']
+        verbose_name = _(u'approval request')
+        verbose_name_plural = _(u'approval requests')
 
     def __str__(self):
         return f"Approval for {self.deliverable.title} ({self.status})"
@@ -80,6 +83,8 @@ class ApprovalStep(models.Model):
     class Meta:
         db_table = 'approval_steps'
         ordering = ['approval_request', 'step_order']
+        verbose_name = _(u'approval step')
+        verbose_name_plural = _(u'approval steps')
 
     def __str__(self):
         return f"Step {self.step_order} ({self.assigned_role}) - {self.status}"

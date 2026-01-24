@@ -1,6 +1,7 @@
 """Deliverable model."""
 from django.conf import settings
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class Deliverable(models.Model):
@@ -12,8 +13,8 @@ class Deliverable(models.Model):
         APPROVED = 'APPROVED', 'Approved'
         REJECTED = 'REJECTED', 'Rejected'
 
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    title = models.CharField(_(u'title'), max_length=255)
+    description = models.TextField(_(u'description'), blank=True)
     client = models.ForeignKey(
         'clients.Client',
         on_delete=models.CASCADE,
@@ -35,6 +36,8 @@ class Deliverable(models.Model):
     class Meta:
         db_table = 'deliverables'
         ordering = ['-created_at']
+        verbose_name = _(u'deliverable')
+        verbose_name_plural = _(u'deliverables')
 
     def __str__(self):
         return f"{self.title} ({self.status})"

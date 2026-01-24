@@ -4,7 +4,7 @@ An application for managing approval workflows for deliverables in an enterprise
 
 ## Tech Stack
 
-- **Backend**: Django 3.2, Django REST Framework, PostgreSQL
+- **Backend**: Django 2.2, Django REST Framework, PostgreSQL
 - **Frontend**: Vue 3, Vite, Pinia, Vue Router
 - **Testing**: pytest (backend), Vitest (frontend)
 - **Infrastructure**: Docker, Docker Compose

@@ -3,6 +3,8 @@ from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
+from .config import AuditConfig, AuditRetentionPolicy
+
 
 class AuditEvent(models.Model):
     """Append-only audit log for tracking actions."""
