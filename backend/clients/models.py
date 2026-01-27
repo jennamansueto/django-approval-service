@@ -1,10 +1,8 @@
 """Client model."""
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
-@python_2_unicode_compatible
 class Client(models.Model):
     """A client entity that deliverables belong to."""
 
@@ -19,13 +17,15 @@ class Client(models.Model):
         blank=True,
         help_text=_(u'Short code for internal reference'),
     )
-    is_active = models.NullBooleanField(
+    is_active = models.BooleanField(
         _(u'active status'),
+        null=True,
         default=True,
         help_text=_(u'Whether this client is currently active'),
     )
-    is_priority = models.NullBooleanField(
+    is_priority = models.BooleanField(
         _(u'priority client'),
+        null=True,
         default=False,
         help_text=_(u'Whether this client has priority status'),
     )

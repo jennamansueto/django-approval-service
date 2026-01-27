@@ -1,8 +1,8 @@
 """Views for accounts app."""
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext as _
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -22,8 +22,8 @@ class LoginView(APIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        username = force_text(serializer.validated_data['username'])
-        password = force_text(serializer.validated_data['password'])
+        username = force_str(serializer.validated_data['username'])
+        password = force_str(serializer.validated_data['password'])
 
         user = authenticate(
             request,
@@ -34,18 +34,18 @@ class LoginView(APIView):
         if user is None:
             error_message = _(u'Invalid credentials')
             return Response(
-                {'error': smart_text(error_message)},
+                {'error': str(error_message)},
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
         login(request, user)
         
         # Return different response format for AJAX requests
-        if request.is_ajax():
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return Response({
                 'success': True,
                 'user': UserSerializer(user).data,
-                'message': smart_text(_(u'Login successful')),
+                'message': str(_(u'Login successful')),
             })
         return Response(UserSerializer(user).data)
 
@@ -56,17 +56,17 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        username = force_text(request.user.username)
+        username = force_str(request.user.username)
         logout(request)
         
         message = _(u'Logged out successfully')
-        if request.is_ajax():
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return Response({
                 'success': True,
-                'message': smart_text(message),
+                'message': str(message),
                 'username': username,
             })
-        return Response({'message': smart_text(message)})
+        return Response({'message': str(message)})
 
 
 class MeView(APIView):
@@ -78,9 +78,9 @@ class MeView(APIView):
         user_data = UserSerializer(request.user).data
         
         # Add extra info for AJAX requests
-        if request.is_ajax():
-            user_data['display_name'] = smart_text(
-                force_text(request.user.get_full_name()) or 
-                force_text(request.user.username)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            user_data['display_name'] = str(
+                force_str(request.user.get_full_name()) or 
+                force_str(request.user.username)
             )
         return Response(user_data)

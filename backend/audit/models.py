@@ -1,14 +1,11 @@
 """Audit event model."""
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .config import AuditConfig, AuditRetentionPolicy
 
 
-@python_2_unicode_compatible
 class AuditEvent(models.Model):
     """Append-only audit log for tracking actions."""
 
@@ -35,7 +32,7 @@ class AuditEvent(models.Model):
         max_length=50,
         help_text=_(u'ID of the object the action was performed on'),
     )
-    payload = JSONField(
+    payload = models.JSONField(
         _(u'payload'),
         default=dict,
         blank=True,
@@ -52,8 +49,9 @@ class AuditEvent(models.Model):
         blank=True,
         help_text=_(u'Browser user agent string'),
     )
-    is_system_event = models.NullBooleanField(
+    is_system_event = models.BooleanField(
         _(u'system event'),
+        null=True,
         default=False,
         help_text=_(u'Whether this event was triggered by the system'),
     )

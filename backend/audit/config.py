@@ -1,11 +1,9 @@
 """Audit configuration and retention policy models."""
 from django.conf import settings
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
-@python_2_unicode_compatible
 class AuditConfig(models.Model):
     """Configuration settings for the audit system."""
 
@@ -21,8 +19,9 @@ class AuditConfig(models.Model):
         _(u'configuration value'),
         help_text=_(u'Value for this configuration setting'),
     )
-    is_enabled = models.NullBooleanField(
+    is_enabled = models.BooleanField(
         _(u'enabled'),
+        null=True,
         default=True,
         help_text=_(u'Whether this configuration is active'),
     )
@@ -38,7 +37,6 @@ class AuditConfig(models.Model):
         return f"{self.key}: {self.value[:50]}"
 
 
-@python_2_unicode_compatible
 class AuditRetentionPolicy(models.Model):
     """Defines how long audit events should be retained."""
 
@@ -60,8 +58,9 @@ class AuditRetentionPolicy(models.Model):
         blank=True,
         help_text=_(u'Specific verb this policy applies to, or blank for all'),
     )
-    is_active = models.NullBooleanField(
+    is_active = models.BooleanField(
         _(u'active'),
+        null=True,
         default=True,
         help_text=_(u'Whether this policy is currently active'),
     )

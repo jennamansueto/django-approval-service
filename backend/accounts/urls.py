@@ -1,14 +1,14 @@
 """URL configuration for accounts app."""
-from django.conf.urls import url
+from django.urls import path
 
 from .views import LoginView, LogoutView, MeView
 
 app_name = 'accounts'
 
 urlpatterns = [
-    url(r'^login/$', LoginView.as_view(), name='login'),
-    url(r'^logout/$', LogoutView.as_view(), name='logout'),
-    url(r'^me/$', MeView.as_view(), name='me'),
-    url(r'^profile/$', MeView.as_view(), name='profile'),
-    url(r'^user/current/$', MeView.as_view(), name='current-user'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('me/', MeView.as_view(), name='me'),
+    path('profile/', MeView.as_view(), name='profile'),
+    path('user/current/', MeView.as_view(), name='current-user'),
 ]

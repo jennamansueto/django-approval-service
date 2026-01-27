@@ -1,6 +1,5 @@
 """Serializers for deliverables app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from .models import Deliverable
@@ -13,13 +12,15 @@ class DeliverableSerializer(serializers.ModelSerializer):
     client_name = serializers.CharField(source='client.name', read_only=True)
     status_display = serializers.SerializerMethodField()
     priority_display = serializers.SerializerMethodField()
-    is_urgent = serializers.NullBooleanField(
+    is_urgent = serializers.BooleanField(
         required=False,
+        allow_null=True,
         label=_(u'Urgent'),
         help_text=_(u'Whether this deliverable requires urgent attention'),
     )
-    is_confidential = serializers.NullBooleanField(
+    is_confidential = serializers.BooleanField(
         required=False,
+        allow_null=True,
         label=_(u'Confidential'),
         help_text=_(u'Whether this deliverable contains confidential information'),
     )
@@ -39,11 +40,11 @@ class DeliverableSerializer(serializers.ModelSerializer):
 
     def get_status_display(self, obj):
         """Get human-readable status."""
-        return smart_text(obj.get_status_display())
+        return str(obj.get_status_display())
 
     def get_priority_display(self, obj):
         """Get human-readable priority."""
-        return smart_text(obj.get_priority_display())
+        return str(obj.get_priority_display())
 
 
 class DeliverableCreateSerializer(serializers.ModelSerializer):

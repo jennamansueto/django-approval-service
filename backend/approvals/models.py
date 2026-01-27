@@ -1,12 +1,9 @@
 """Approval models."""
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
-@python_2_unicode_compatible
 class ApprovalRequest(models.Model):
     """A request for approval of a deliverable."""
 
@@ -46,12 +43,13 @@ class ApprovalRequest(models.Model):
         blank=True,
         help_text=_(u'Additional comments for the approval request'),
     )
-    is_expedited = models.NullBooleanField(
+    is_expedited = models.BooleanField(
         _(u'expedited'),
+        null=True,
         default=False,
         help_text=_(u'Whether this request should be expedited'),
     )
-    request_metadata = JSONField(
+    request_metadata = models.JSONField(
         _(u'request metadata'),
         default=dict,
         blank=True,
@@ -70,7 +68,6 @@ class ApprovalRequest(models.Model):
         return f"Approval for {self.deliverable.title} ({self.status})"
 
 
-@python_2_unicode_compatible
 class ApprovalStep(models.Model):
     """An individual step in an approval workflow."""
 
@@ -126,8 +123,9 @@ class ApprovalStep(models.Model):
         blank=True,
         help_text=_(u'Notes from the approver for this step'),
     )
-    is_optional = models.NullBooleanField(
+    is_optional = models.BooleanField(
         _(u'optional step'),
+        null=True,
         default=False,
         help_text=_(u'Whether this step can be skipped'),
     )

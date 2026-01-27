@@ -1,6 +1,6 @@
 """Views for clients app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext as _
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -24,7 +24,7 @@ class ClientViewSet(viewsets.ModelViewSet):
         # Filter by name if provided
         name = self.request.query_params.get('name')
         if name:
-            name = force_text(name)
+            name = force_str(name)
             queryset = queryset.filter(name__icontains=name)
         
         # Filter by active status
@@ -38,12 +38,12 @@ class ClientViewSet(viewsets.ModelViewSet):
         """List clients with AJAX-aware response."""
         response = super().list(request, *args, **kwargs)
         
-        if request.is_ajax():
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return Response({
                 'success': True,
                 'count': len(response.data),
                 'results': response.data,
-                'message': smart_text(_(u'Clients retrieved successfully')),
+                'message': str(_(u'Clients retrieved successfully')),
             })
         return response
 
@@ -56,12 +56,12 @@ class ClientViewSet(viewsets.ModelViewSet):
         
         status_text = _(u'activated') if client.is_active else _(u'deactivated')
         message = _(u'Client %(name)s has been %(status)s') % {
-            'name': force_text(client.name),
-            'status': smart_text(status_text),
+            'name': force_str(client.name),
+            'status': str(status_text),
         }
         
         return Response({
             'success': True,
-            'message': smart_text(message),
+            'message': str(message),
             'client': ClientSerializer(client).data,
         })
