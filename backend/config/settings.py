@@ -103,9 +103,10 @@ REST_FRAMEWORK = {
 }
 
 # Disable CSRF for API requests (session auth still works via cookies)
+# Django 4.0+ requires full URLs with scheme for CSRF_TRUSTED_ORIGINS
 CSRF_TRUSTED_ORIGINS = [
-    'localhost:5173',
-    '127.0.0.1:5173',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
 ]
 
 # CORS settings
@@ -117,3 +118,6 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
+
+# Default primary key field type (Django 3.2+)
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

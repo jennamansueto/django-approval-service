@@ -1,29 +1,30 @@
 """Utility functions for clients app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.http import urlquote, urlquote_plus
-from django.utils.translation import ugettext as _
+from urllib.parse import quote, quote_plus
+
+from django.utils.encoding import force_str
+from django.utils.translation import gettext as _
 
 
 def get_client_display_name(client):
     """Get a formatted display name for the client."""
-    name = force_text(client.name)
+    name = force_str(client.name)
     if client.code:
-        code = force_text(client.code)
-        return smart_text(_(u'%(name)s (%(code)s)') % {'name': name, 'code': code})
-    return smart_text(name)
+        code = force_str(client.code)
+        return str(_(u'%(name)s (%(code)s)') % {'name': name, 'code': code})
+    return str(name)
 
 
 def get_client_url(client):
     """Generate a URL-safe path for the client."""
-    name = force_text(client.name)
-    return '/clients/%s/' % urlquote(name)
+    name = force_str(client.name)
+    return '/clients/%s/' % quote(name)
 
 
 def get_client_export_filename(client):
     """Generate a safe filename for client export."""
-    name = force_text(client.name)
-    # Use urlquote_plus to handle spaces as plus signs
-    safe_name = urlquote_plus(name)
+    name = force_str(client.name)
+    # Use quote_plus to handle spaces as plus signs
+    safe_name = quote_plus(name)
     return 'client_%s_export.csv' % safe_name
 
 
@@ -34,8 +35,8 @@ def format_client_status(client):
     else:
         status = _(u'Inactive')
     
-    name = force_text(client.name)
-    return smart_text(_(u'%(name)s - %(status)s') % {
+    name = force_str(client.name)
+    return str(_(u'%(name)s - %(status)s') % {
         'name': name,
         'status': status,
     })

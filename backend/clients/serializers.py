@@ -1,6 +1,6 @@
 """Serializers for clients app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from .models import Client
@@ -9,13 +9,15 @@ from .models import Client
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer for Client model."""
 
-    is_active = serializers.NullBooleanField(
+    is_active = serializers.BooleanField(
         required=False,
+        allow_null=True,
         label=_(u'Active Status'),
         help_text=_(u'Whether the client is currently active'),
     )
-    is_priority = serializers.NullBooleanField(
+    is_priority = serializers.BooleanField(
         required=False,
+        allow_null=True,
         label=_(u'Priority Status'),
         help_text=_(u'Whether the client has priority status'),
     )
@@ -33,14 +35,14 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def get_display_name(self, obj):
         """Get formatted display name with code."""
-        name = force_text(obj.name)
+        name = force_str(obj.name)
         if obj.code:
-            code = force_text(obj.code)
-            return smart_text(_(u'%(name)s (%(code)s)') % {'name': name, 'code': code})
-        return smart_text(name)
+            code = force_str(obj.code)
+            return str(_(u'%(name)s (%(code)s)') % {'name': name, 'code': code})
+        return str(name)
 
     def get_status_display(self, obj):
         """Get human-readable status."""
         if obj.is_active:
-            return smart_text(_(u'Active'))
-        return smart_text(_(u'Inactive'))
+            return str(_(u'Active'))
+        return str(_(u'Inactive'))

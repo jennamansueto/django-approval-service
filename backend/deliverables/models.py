@@ -1,12 +1,9 @@
 """Deliverable model."""
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
-@python_2_unicode_compatible
 class Deliverable(models.Model):
     """A deliverable that can be submitted for approval."""
 
@@ -64,17 +61,19 @@ class Deliverable(models.Model):
         default=MEDIUM,
         help_text=_(u'Priority level for this deliverable'),
     )
-    is_urgent = models.NullBooleanField(
+    is_urgent = models.BooleanField(
         _(u'urgent'),
+        null=True,
         default=False,
         help_text=_(u'Whether this deliverable requires urgent attention'),
     )
-    is_confidential = models.NullBooleanField(
+    is_confidential = models.BooleanField(
         _(u'confidential'),
+        null=True,
         default=False,
         help_text=_(u'Whether this deliverable contains confidential information'),
     )
-    metadata = JSONField(
+    metadata = models.JSONField(
         _(u'metadata'),
         default=dict,
         blank=True,

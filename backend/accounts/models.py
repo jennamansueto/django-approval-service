@@ -1,11 +1,9 @@
 """User model with role field."""
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
-@python_2_unicode_compatible
 class User(AbstractUser):
     """Custom user model with role field."""
 
@@ -28,13 +26,15 @@ class User(AbstractUser):
         default=VIEWER,
         help_text=_(u'The role determines user permissions in the system'),
     )
-    is_email_verified = models.NullBooleanField(
+    is_email_verified = models.BooleanField(
         _(u'email verified'),
+        null=True,
         default=False,
         help_text=_(u'Whether the user has verified their email address'),
     )
-    notification_preferences = models.NullBooleanField(
+    notification_preferences = models.BooleanField(
         _(u'receive notifications'),
+        null=True,
         default=True,
         help_text=_(u'Whether the user wants to receive email notifications'),
     )
