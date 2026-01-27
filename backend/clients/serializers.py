@@ -7,7 +7,7 @@ from .models import Client
 class ClientSerializer(serializers.ModelSerializer):
     """Serializer for Client model."""
 
-    is_active = serializers.NullBooleanField(required=False)
+    is_active = serializers.BooleanField(required=False, allow_null=True)
 
     class Meta:
         model = Client
