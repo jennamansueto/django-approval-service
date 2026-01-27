@@ -87,10 +87,11 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django REST Framework
 REST_FRAMEWORK = {
@@ -104,8 +105,8 @@ REST_FRAMEWORK = {
 
 # Disable CSRF for API requests (session auth still works via cookies)
 CSRF_TRUSTED_ORIGINS = [
-    'localhost:5173',
-    '127.0.0.1:5173',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
 ]
 
 # CORS settings
