@@ -1,5 +1,7 @@
 """Views for deliverables app."""
 from django.utils import timezone
+from django.utils.encoding import force_text, smart_text
+from django.utils.translation import ugettext as _
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -26,14 +28,28 @@ class DeliverableViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+    def list(self, request, *args, **kwargs):
+        """List deliverables with AJAX-aware response."""
+        response = super().list(request, *args, **kwargs)
+        
+        if request.is_ajax():
+            return Response({
+                'success': True,
+                'count': len(response.data),
+                'results': response.data,
+                'message': smart_text(_(u'Deliverables retrieved successfully')),
+            })
+        return response
+
     @action(detail=True, methods=['post'])
     def submit(self, request, pk=None):
         """Submit a deliverable for approval."""
         deliverable = self.get_object()
 
         if deliverable.status != Deliverable.DRAFT:
+            error_msg = _(u'Only draft deliverables can be submitted')
             return Response(
-                {'error': 'Only draft deliverables can be submitted'},
+                {'error': smart_text(error_msg)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -56,7 +72,16 @@ class DeliverableViewSet(viewsets.ModelViewSet):
             verb='submitted',
             object_type='Deliverable',
             object_id=str(deliverable.id),
-            payload={'title': deliverable.title},
+            payload={'title': force_text(deliverable.title)},
         )
 
+        if request.is_ajax():
+            message = _(u'Deliverable "%(title)s" submitted for approval') % {
+                'title': force_text(deliverable.title),
+            }
+            return Response({
+                'success': True,
+                'message': smart_text(message),
+                'deliverable': DeliverableSerializer(deliverable).data,
+            })
         return Response(DeliverableSerializer(deliverable).data)

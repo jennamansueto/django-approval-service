@@ -2,10 +2,13 @@
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
 from .config import AuditConfig, AuditRetentionPolicy
 
 
+@python_2_unicode_compatible
 class AuditEvent(models.Model):
     """Append-only audit log for tracking actions."""
 
@@ -15,12 +18,46 @@ class AuditEvent(models.Model):
         null=True,
         blank=True,
         related_name='audit_events',
+        verbose_name=_(u'actor'),
     )
-    verb = models.CharField(max_length=50)
-    object_type = models.CharField(max_length=50)
-    object_id = models.CharField(max_length=50)
-    payload = JSONField(default=dict, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    verb = models.CharField(
+        _(u'verb'),
+        max_length=50,
+        help_text=_(u'The action that was performed'),
+    )
+    object_type = models.CharField(
+        _(u'object type'),
+        max_length=50,
+        help_text=_(u'Type of object the action was performed on'),
+    )
+    object_id = models.CharField(
+        _(u'object ID'),
+        max_length=50,
+        help_text=_(u'ID of the object the action was performed on'),
+    )
+    payload = JSONField(
+        _(u'payload'),
+        default=dict,
+        blank=True,
+        help_text=_(u'Additional data about the event'),
+    )
+    ip_address = models.GenericIPAddressField(
+        _(u'IP address'),
+        null=True,
+        blank=True,
+        help_text=_(u'IP address of the request'),
+    )
+    user_agent = models.TextField(
+        _(u'user agent'),
+        blank=True,
+        help_text=_(u'Browser user agent string'),
+    )
+    is_system_event = models.NullBooleanField(
+        _(u'system event'),
+        default=False,
+        help_text=_(u'Whether this event was triggered by the system'),
+    )
+    created_at = models.DateTimeField(_(u'created at'), auto_now_add=True)
 
     class Meta:
         db_table = 'audit_events'

@@ -31,7 +31,7 @@ class TestLoginView:
     def test_login_success(self, api_client, user):
         """Test successful login."""
         response = api_client.post(
-            reverse('login'),
+            reverse('accounts:login'),
             {'username': 'testuser', 'password': 'testpass123'},
             format='json',
         )
