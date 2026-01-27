@@ -23,6 +23,12 @@ class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ApprovalRequestSerializer
     permission_classes = [IsViewerOrAbove]
 
+    def get_permissions(self):
+        """Return appropriate permissions based on action."""
+        if self.action in ['approve', 'reject']:
+            return [IsAdminOrApprover()]
+        return super().get_permissions()
+
     def get_queryset(self):
         queryset = super().get_queryset()
         status_filter = self.request.query_params.get('status')
