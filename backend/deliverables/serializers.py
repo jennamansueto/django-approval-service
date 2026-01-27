@@ -1,6 +1,6 @@
 """Serializers for deliverables app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_str, smart_str
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from .models import Deliverable
@@ -13,15 +13,17 @@ class DeliverableSerializer(serializers.ModelSerializer):
     client_name = serializers.CharField(source='client.name', read_only=True)
     status_display = serializers.SerializerMethodField()
     priority_display = serializers.SerializerMethodField()
-    is_urgent = serializers.NullBooleanField(
+    is_urgent = serializers.BooleanField(
         required=False,
-        label=_(u'Urgent'),
-        help_text=_(u'Whether this deliverable requires urgent attention'),
+        allow_null=True,
+        label=_('Urgent'),
+        help_text=_('Whether this deliverable requires urgent attention'),
     )
-    is_confidential = serializers.NullBooleanField(
+    is_confidential = serializers.BooleanField(
         required=False,
-        label=_(u'Confidential'),
-        help_text=_(u'Whether this deliverable contains confidential information'),
+        allow_null=True,
+        label=_('Confidential'),
+        help_text=_('Whether this deliverable contains confidential information'),
     )
 
     class Meta:
@@ -39,25 +41,25 @@ class DeliverableSerializer(serializers.ModelSerializer):
 
     def get_status_display(self, obj):
         """Get human-readable status."""
-        return smart_text(obj.get_status_display())
+        return smart_str(obj.get_status_display())
 
     def get_priority_display(self, obj):
         """Get human-readable priority."""
-        return smart_text(obj.get_priority_display())
+        return smart_str(obj.get_priority_display())
 
 
 class DeliverableCreateSerializer(serializers.ModelSerializer):
     """Serializer for creating deliverables."""
 
     title = serializers.CharField(
-        label=_(u'Title'),
-        help_text=_(u'Enter the deliverable title'),
+        label=_('Title'),
+        help_text=_('Enter the deliverable title'),
     )
     description = serializers.CharField(
         required=False,
         allow_blank=True,
-        label=_(u'Description'),
-        help_text=_(u'Enter a detailed description'),
+        label=_('Description'),
+        help_text=_('Enter a detailed description'),
     )
 
     class Meta:

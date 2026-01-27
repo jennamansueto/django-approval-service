@@ -1,6 +1,6 @@
 """Serializers for approvals app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_str, smart_str
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from .models import ApprovalRequest, ApprovalStep
@@ -12,10 +12,11 @@ class ApprovalStepSerializer(serializers.ModelSerializer):
     decided_by_username = serializers.CharField(source='decided_by.username', read_only=True)
     status_display = serializers.SerializerMethodField()
     role_display = serializers.SerializerMethodField()
-    is_optional = serializers.NullBooleanField(
+    is_optional = serializers.BooleanField(
         required=False,
-        label=_(u'Optional'),
-        help_text=_(u'Whether this step can be skipped'),
+        allow_null=True,
+        label=_('Optional'),
+        help_text=_('Whether this step can be skipped'),
     )
 
     class Meta:
@@ -29,11 +30,11 @@ class ApprovalStepSerializer(serializers.ModelSerializer):
 
     def get_status_display(self, obj):
         """Get human-readable status."""
-        return smart_text(obj.get_status_display())
+        return smart_str(obj.get_status_display())
 
     def get_role_display(self, obj):
         """Get human-readable role."""
-        return smart_text(obj.get_assigned_role_display())
+        return smart_str(obj.get_assigned_role_display())
 
 
 class ApprovalRequestSerializer(serializers.ModelSerializer):
@@ -43,10 +44,11 @@ class ApprovalRequestSerializer(serializers.ModelSerializer):
     deliverable_title = serializers.CharField(source='deliverable.title', read_only=True)
     steps = ApprovalStepSerializer(many=True, read_only=True)
     status_display = serializers.SerializerMethodField()
-    is_expedited = serializers.NullBooleanField(
+    is_expedited = serializers.BooleanField(
         required=False,
-        label=_(u'Expedited'),
-        help_text=_(u'Whether this request should be expedited'),
+        allow_null=True,
+        label=_('Expedited'),
+        help_text=_('Whether this request should be expedited'),
     )
 
     class Meta:
@@ -64,4 +66,4 @@ class ApprovalRequestSerializer(serializers.ModelSerializer):
 
     def get_status_display(self, obj):
         """Get human-readable status."""
-        return smart_text(obj.get_status_display())
+        return smart_str(obj.get_status_display())

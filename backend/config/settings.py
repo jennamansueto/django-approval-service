@@ -92,6 +92,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Default primary key field type (Django 3.2+)
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -103,9 +106,10 @@ REST_FRAMEWORK = {
 }
 
 # Disable CSRF for API requests (session auth still works via cookies)
+# Django 4.0+ requires full URLs with scheme
 CSRF_TRUSTED_ORIGINS = [
-    'localhost:5173',
-    '127.0.0.1:5173',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
 ]
 
 # CORS settings
