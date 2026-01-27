@@ -1,14 +1,11 @@
 """Audit event model."""
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from .config import AuditConfig, AuditRetentionPolicy
 
 
-@python_2_unicode_compatible
 class AuditEvent(models.Model):
     """Append-only audit log for tracking actions."""
 
@@ -18,46 +15,48 @@ class AuditEvent(models.Model):
         null=True,
         blank=True,
         related_name='audit_events',
-        verbose_name=_(u'actor'),
+        verbose_name=_('actor'),
     )
     verb = models.CharField(
-        _(u'verb'),
+        _('verb'),
         max_length=50,
-        help_text=_(u'The action that was performed'),
+        help_text=_('The action that was performed'),
     )
     object_type = models.CharField(
-        _(u'object type'),
+        _('object type'),
         max_length=50,
-        help_text=_(u'Type of object the action was performed on'),
+        help_text=_('Type of object the action was performed on'),
     )
     object_id = models.CharField(
-        _(u'object ID'),
+        _('object ID'),
         max_length=50,
-        help_text=_(u'ID of the object the action was performed on'),
+        help_text=_('ID of the object the action was performed on'),
     )
-    payload = JSONField(
-        _(u'payload'),
+    payload = models.JSONField(
+        _('payload'),
         default=dict,
         blank=True,
-        help_text=_(u'Additional data about the event'),
+        help_text=_('Additional data about the event'),
     )
     ip_address = models.GenericIPAddressField(
-        _(u'IP address'),
+        _('IP address'),
         null=True,
         blank=True,
-        help_text=_(u'IP address of the request'),
+        help_text=_('IP address of the request'),
     )
     user_agent = models.TextField(
-        _(u'user agent'),
+        _('user agent'),
         blank=True,
-        help_text=_(u'Browser user agent string'),
+        help_text=_('Browser user agent string'),
     )
-    is_system_event = models.NullBooleanField(
-        _(u'system event'),
+    is_system_event = models.BooleanField(
+        _('system event'),
+        null=True,
+        blank=True,
         default=False,
-        help_text=_(u'Whether this event was triggered by the system'),
+        help_text=_('Whether this event was triggered by the system'),
     )
-    created_at = models.DateTimeField(_(u'created at'), auto_now_add=True)
+    created_at = models.DateTimeField(_('created at'), auto_now_add=True)
 
     class Meta:
         db_table = 'audit_events'

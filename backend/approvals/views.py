@@ -1,7 +1,7 @@
 """Views for approvals app."""
 from django.utils import timezone
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext as _
+from django.utils.encoding import force_str, smart_str
+from django.utils.translation import gettext as _
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -36,9 +36,9 @@ class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
         approval_request = self.get_object()
 
         if approval_request.status != ApprovalRequest.PENDING:
-            error_msg = _(u'Only pending requests can be approved')
+            error_msg = _('Only pending requests can be approved')
             return Response(
-                {'error': smart_text(error_msg)},
+                {'error': smart_str(error_msg)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -64,16 +64,16 @@ class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
             verb='approved',
             object_type='ApprovalRequest',
             object_id=str(approval_request.id),
-            payload={'deliverable_title': force_text(deliverable.title)},
+            payload={'deliverable_title': force_str(deliverable.title)},
         )
 
-        if request.is_ajax():
-            message = _(u'Approval request for "%(title)s" has been approved') % {
-                'title': force_text(deliverable.title),
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            message = _('Approval request for "%(title)s" has been approved') % {
+                'title': force_str(deliverable.title),
             }
             return Response({
                 'success': True,
-                'message': smart_text(message),
+                'message': smart_str(message),
                 'approval_request': ApprovalRequestSerializer(approval_request).data,
             })
         return Response(ApprovalRequestSerializer(approval_request).data)
@@ -84,9 +84,9 @@ class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
         approval_request = self.get_object()
 
         if approval_request.status != ApprovalRequest.PENDING:
-            error_msg = _(u'Only pending requests can be rejected')
+            error_msg = _('Only pending requests can be rejected')
             return Response(
-                {'error': smart_text(error_msg)},
+                {'error': smart_str(error_msg)},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -112,16 +112,16 @@ class ApprovalRequestViewSet(viewsets.ReadOnlyModelViewSet):
             verb='rejected',
             object_type='ApprovalRequest',
             object_id=str(approval_request.id),
-            payload={'deliverable_title': force_text(deliverable.title)},
+            payload={'deliverable_title': force_str(deliverable.title)},
         )
 
-        if request.is_ajax():
-            message = _(u'Approval request for "%(title)s" has been rejected') % {
-                'title': force_text(deliverable.title),
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            message = _('Approval request for "%(title)s" has been rejected') % {
+                'title': force_str(deliverable.title),
             }
             return Response({
                 'success': True,
-                'message': smart_text(message),
+                'message': smart_str(message),
                 'approval_request': ApprovalRequestSerializer(approval_request).data,
             })
         return Response(ApprovalRequestSerializer(approval_request).data)

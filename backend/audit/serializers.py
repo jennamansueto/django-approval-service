@@ -1,6 +1,6 @@
 """Serializers for audit app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_str, smart_str
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from .models import AuditEvent
@@ -27,21 +27,21 @@ class AuditEventSerializer(serializers.ModelSerializer):
         """Get formatted actor display name."""
         if obj.actor:
             if obj.actor.first_name and obj.actor.last_name:
-                return smart_text(force_text(obj.actor.get_full_name()))
-            return force_text(obj.actor.username)
-        return smart_text(_(u'System'))
+                return smart_str(force_str(obj.actor.get_full_name()))
+            return force_str(obj.actor.username)
+        return smart_str(_('System'))
 
     def get_event_description(self, obj):
         """Get human-readable event description."""
         actor = self.get_actor_display(obj)
-        verb = force_text(obj.verb)
-        object_type = force_text(obj.object_type)
-        object_id = force_text(obj.object_id)
+        verb = force_str(obj.verb)
+        object_type = force_str(obj.object_type)
+        object_id = force_str(obj.object_id)
         
-        description = _(u'%(actor)s %(verb)s %(object_type)s #%(object_id)s') % {
+        description = _('%(actor)s %(verb)s %(object_type)s #%(object_id)s') % {
             'actor': actor,
             'verb': verb,
             'object_type': object_type,
             'object_id': object_id,
         }
-        return smart_text(description)
+        return smart_str(description)

@@ -1,6 +1,6 @@
 """Views for clients app."""
-from django.utils.encoding import force_text, smart_text
-from django.utils.translation import ugettext as _
+from django.utils.encoding import force_str, smart_str
+from django.utils.translation import gettext as _
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -24,7 +24,7 @@ class ClientViewSet(viewsets.ModelViewSet):
         # Filter by name if provided
         name = self.request.query_params.get('name')
         if name:
-            name = force_text(name)
+            name = force_str(name)
             queryset = queryset.filter(name__icontains=name)
         
         # Filter by active status
@@ -38,12 +38,12 @@ class ClientViewSet(viewsets.ModelViewSet):
         """List clients with AJAX-aware response."""
         response = super().list(request, *args, **kwargs)
         
-        if request.is_ajax():
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return Response({
                 'success': True,
                 'count': len(response.data),
                 'results': response.data,
-                'message': smart_text(_(u'Clients retrieved successfully')),
+                'message': smart_str(_('Clients retrieved successfully')),
             })
         return response
 
@@ -54,14 +54,14 @@ class ClientViewSet(viewsets.ModelViewSet):
         client.is_active = not client.is_active
         client.save()
         
-        status_text = _(u'activated') if client.is_active else _(u'deactivated')
-        message = _(u'Client %(name)s has been %(status)s') % {
-            'name': force_text(client.name),
-            'status': smart_text(status_text),
+        status_text = _('activated') if client.is_active else _('deactivated')
+        message = _('Client %(name)s has been %(status)s') % {
+            'name': force_str(client.name),
+            'status': smart_str(status_text),
         }
         
         return Response({
             'success': True,
-            'message': smart_text(message),
+            'message': smart_str(message),
             'client': ClientSerializer(client).data,
         })
