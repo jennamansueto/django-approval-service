@@ -69,6 +69,28 @@ def approval_request(deliverable, planner_user):
     return request
 
 
+@pytest.fixture
+def admin_user():
+    """Create an admin user."""
+    return User.objects.create_user(
+        username='admin',
+        email='admin@example.com',
+        password='testpass123',
+        role=User.ADMIN,
+    )
+
+
+@pytest.fixture
+def viewer_user():
+    """Create a viewer user."""
+    return User.objects.create_user(
+        username='viewer',
+        email='viewer@example.com',
+        password='testpass123',
+        role=User.VIEWER,
+    )
+
+
 @pytest.mark.django_db
 class TestApprovalRequestViewSet:
     """Tests for ApprovalRequest viewset."""
@@ -79,4 +101,66 @@ class TestApprovalRequestViewSet:
         response = api_client.get('/api/approvals/')
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
+
+
+@pytest.mark.django_db
+class TestApprovalPermissions:
+    """Tests for approval action permissions."""
+
+    def test_admin_can_approve(self, api_client, admin_user, approval_request):
+        """Test that Admin can call POST /api/approvals/{id}/approve/."""
+        api_client.force_authenticate(user=admin_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_approver_can_approve(self, api_client, approver_user, approval_request):
+        """Test that Approver can call POST /api/approvals/{id}/approve/."""
+        api_client.force_authenticate(user=approver_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_planner_cannot_approve(self, api_client, planner_user, approval_request):
+        """Test that Planner gets 403 when calling POST /api/approvals/{id}/approve/."""
+        api_client.force_authenticate(user=planner_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_viewer_cannot_approve(self, api_client, viewer_user, approval_request):
+        """Test that Viewer gets 403 when calling POST /api/approvals/{id}/approve/."""
+        api_client.force_authenticate(user=viewer_user)
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_unauthenticated_cannot_approve(self, api_client, approval_request):
+        """Test that unauthenticated user gets 403 when calling POST /api/approvals/{id}/approve/."""
+        response = api_client.post(f'/api/approvals/{approval_request.id}/approve/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+@pytest.fixture
+def draft_deliverable(client_obj, planner_user):
+    """Create a draft deliverable for submit tests."""
+    return Deliverable.objects.create(
+        title='Draft Deliverable',
+        client=client_obj,
+        created_by=planner_user,
+        status=Deliverable.DRAFT,
+    )
+
+
+@pytest.mark.django_db
+class TestViewerReadOnlyAccess:
+    """Tests for Viewer role read-only access."""
+
+    def test_viewer_can_list_approvals(self, api_client, viewer_user, approval_request):
+        """Test that Viewer can GET /api/approvals/ (should succeed with 200)."""
+        api_client.force_authenticate(user=viewer_user)
+        response = api_client.get('/api/approvals/')
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_viewer_cannot_submit_deliverable(self, api_client, viewer_user, draft_deliverable):
+        """Test that Viewer cannot POST /api/deliverables/{id}/submit/ (should get 403)."""
+        api_client.force_authenticate(user=viewer_user)
+        response = api_client.post(f'/api/deliverables/{draft_deliverable.id}/submit/')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 

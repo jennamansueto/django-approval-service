@@ -52,6 +52,28 @@ def deliverable(client_obj, planner_user):
     )
 
 
+@pytest.fixture
+def admin_user():
+    """Create an admin user."""
+    return User.objects.create_user(
+        username='admin',
+        email='admin@example.com',
+        password='testpass123',
+        role=User.ADMIN,
+    )
+
+
+@pytest.fixture
+def approver_user():
+    """Create an approver user."""
+    return User.objects.create_user(
+        username='approver',
+        email='approver@example.com',
+        password='testpass123',
+        role=User.APPROVER,
+    )
+
+
 @pytest.mark.django_db
 class TestDeliverableViewSet:
     """Tests for Deliverable viewset."""
@@ -62,4 +84,45 @@ class TestDeliverableViewSet:
         response = api_client.get('/api/deliverables/')
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
+
+
+@pytest.mark.django_db
+class TestDeliverablePermissions:
+    """Tests for deliverable creation permissions."""
+
+    def test_admin_can_create_deliverable(self, api_client, admin_user, client_obj):
+        """Test that Admin can POST /api/deliverables/."""
+        api_client.force_authenticate(user=admin_user)
+        response = api_client.post('/api/deliverables/', {
+            'title': 'New Deliverable',
+            'client': client_obj.id,
+        }, format='json')
+        assert response.status_code == status.HTTP_201_CREATED
+
+    def test_planner_can_create_deliverable(self, api_client, planner_user, client_obj):
+        """Test that Planner can POST /api/deliverables/."""
+        api_client.force_authenticate(user=planner_user)
+        response = api_client.post('/api/deliverables/', {
+            'title': 'New Deliverable',
+            'client': client_obj.id,
+        }, format='json')
+        assert response.status_code == status.HTTP_201_CREATED
+
+    def test_approver_cannot_create_deliverable(self, api_client, approver_user, client_obj):
+        """Test that Approver gets 403 when calling POST /api/deliverables/."""
+        api_client.force_authenticate(user=approver_user)
+        response = api_client.post('/api/deliverables/', {
+            'title': 'New Deliverable',
+            'client': client_obj.id,
+        }, format='json')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_viewer_cannot_create_deliverable(self, api_client, viewer_user, client_obj):
+        """Test that Viewer gets 403 when calling POST /api/deliverables/."""
+        api_client.force_authenticate(user=viewer_user)
+        response = api_client.post('/api/deliverables/', {
+            'title': 'New Deliverable',
+            'client': client_obj.id,
+        }, format='json')
+        assert response.status_code == status.HTTP_403_FORBIDDEN
 
