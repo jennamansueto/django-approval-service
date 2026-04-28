@@ -1,10 +1,14 @@
 """Tests for audit views."""
+import os
+
 import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
 from audit.models import AuditEvent
+
+TEST_USER_PASSWORD = os.environ.get("DJANGO_TEST_USER_PASSWORD", "testpass123")
 
 
 @pytest.fixture
@@ -19,7 +23,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
     )
 
 
