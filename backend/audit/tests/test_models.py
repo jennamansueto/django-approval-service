@@ -6,7 +6,8 @@ import pytest
 from accounts.models import User
 from audit.models import AuditEvent
 
-TEST_USER_PASSWORD = os.environ.get("DJANGO_TEST_USER_PASSWORD", "testpass123")
+_FALLBACK = "testpass123"
+TEST_USER_PASSWORD = os.environ.get("DJANGO_TEST_USER_PASSWORD", _FALLBACK)
 
 
 @pytest.fixture
