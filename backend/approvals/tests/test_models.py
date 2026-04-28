@@ -8,7 +8,8 @@ from approvals.models import ApprovalRequest, ApprovalStep
 from clients.models import Client
 from deliverables.models import Deliverable
 
-TEST_USER_PASSWORD = os.environ.get("DJANGO_TEST_USER_PASSWORD", "testpass123")
+_FALLBACK = "testpass123"
+TEST_USER_PASSWORD = os.environ.get("DJANGO_TEST_USER_PASSWORD", _FALLBACK)
 
 
 @pytest.fixture
