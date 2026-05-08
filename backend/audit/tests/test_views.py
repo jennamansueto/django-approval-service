@@ -1,10 +1,14 @@
 """Tests for audit views."""
+import secrets
+
 import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
 from audit.models import AuditEvent
+
+TEST_USER_PASSWORD = secrets.token_urlsafe(16)
 
 
 @pytest.fixture
@@ -19,7 +23,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
     )
 
 
