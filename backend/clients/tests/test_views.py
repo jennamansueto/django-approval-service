@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 from clients.models import Client
+from clients.tests._credentials import TEST_USER_PASSWORD
 
 
 @pytest.fixture
@@ -19,7 +20,7 @@ def admin_user():
     return User.objects.create_user(
         username='admin',
         email='admin@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
         role=User.ADMIN,
     )
 
