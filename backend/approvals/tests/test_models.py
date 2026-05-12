@@ -3,6 +3,7 @@ import pytest
 
 from accounts.models import User
 from approvals.models import ApprovalRequest, ApprovalStep
+from approvals.tests._credentials import TEST_USER_PASSWORD
 from clients.models import Client
 from deliverables.models import Deliverable
 
@@ -13,7 +14,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
     )
 
 
