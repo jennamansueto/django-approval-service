@@ -1,9 +1,14 @@
 """Tests for deliverables models."""
+import os
+import secrets
+
 import pytest
 
 from accounts.models import User
 from clients.models import Client
 from deliverables.models import Deliverable
+
+TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD") or secrets.token_urlsafe(16)
 
 
 @pytest.fixture
@@ -12,7 +17,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
     )
 
 
