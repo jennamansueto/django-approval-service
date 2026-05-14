@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
-from test_constants import TEST_PASSWORD
+from test_constants import TEST_USER_CREDENTIAL
 from clients.models import Client
 from deliverables.models import Deliverable
 
@@ -21,7 +21,7 @@ def planner_user():
     return User.objects.create_user(
         username='planner',
         email='planner@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_USER_CREDENTIAL,
         role=User.PLANNER,
     )
 
@@ -32,7 +32,7 @@ def viewer_user():
     return User.objects.create_user(
         username='viewer',
         email='viewer@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_USER_CREDENTIAL,
         role=User.VIEWER,
     )
 

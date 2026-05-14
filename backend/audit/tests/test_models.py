@@ -2,7 +2,7 @@
 import pytest
 
 from accounts.models import User
-from test_constants import TEST_PASSWORD
+from test_constants import TEST_USER_CREDENTIAL
 from audit.models import AuditEvent
 
 
@@ -12,7 +12,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_USER_CREDENTIAL,
     )
 
 

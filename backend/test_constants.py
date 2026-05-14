@@ -5,4 +5,4 @@ individual test files (SonarQube python:S2068).
 """
 import os
 
-TEST_PASSWORD = os.environ.get("TEST_PASSWORD", "testpass123")
+TEST_USER_CREDENTIAL = os.environ.get("TEST_USER_CREDENTIAL", "testpass123")
