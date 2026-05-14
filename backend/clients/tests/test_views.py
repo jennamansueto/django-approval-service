@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
+from test_constants import TEST_PASSWORD
 from clients.models import Client
 
 
@@ -19,7 +20,7 @@ def admin_user():
     return User.objects.create_user(
         username='admin',
         email='admin@example.com',
-        password='testpass123',
+        password=TEST_PASSWORD,
         role=User.ADMIN,
     )
 
