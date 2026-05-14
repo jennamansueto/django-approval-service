@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
+from test_constants import TEST_USER_CREDENTIAL
 from audit.models import AuditEvent
 
 
@@ -19,7 +20,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_USER_CREDENTIAL,
     )
 
 

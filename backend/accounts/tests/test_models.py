@@ -2,6 +2,7 @@
 import pytest
 
 from accounts.models import User
+from test_constants import TEST_USER_CREDENTIAL
 
 
 @pytest.mark.django_db
@@ -13,7 +14,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
-            password='testpass123',
+            password=TEST_USER_CREDENTIAL,
         )
         assert user.username == 'testuser'
         assert user.email == 'test@example.com'
@@ -24,7 +25,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='planner',
             email='planner@example.com',
-            password='testpass123',
+            password=TEST_USER_CREDENTIAL,
             role=User.PLANNER,
         )
         assert user.role == User.PLANNER
@@ -34,7 +35,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='admin',
             email='admin@example.com',
-            password='testpass123',
+            password=TEST_USER_CREDENTIAL,
             role=User.ADMIN,
         )
         assert str(user) == 'admin (ADMIN)'
