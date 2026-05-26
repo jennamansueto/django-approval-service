@@ -6,6 +6,7 @@ from rest_framework.test import APIClient
 from accounts.models import User
 from approvals.models import ApprovalRequest, ApprovalStep
 from clients.models import Client
+from conftest import TEST_USER_PASSWORD
 from deliverables.models import Deliverable
 
 
@@ -21,7 +22,7 @@ def approver_user():
     return User.objects.create_user(
         username='approver',
         email='approver@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
         role=User.APPROVER,
     )
 
@@ -32,7 +33,7 @@ def planner_user():
     return User.objects.create_user(
         username='planner',
         email='planner@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
         role=User.PLANNER,
     )
 
