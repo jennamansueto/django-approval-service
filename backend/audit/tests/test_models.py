@@ -3,6 +3,7 @@ import pytest
 
 from accounts.models import User
 from audit.models import AuditEvent
+from conftest import TEST_PASSWORD
 
 
 @pytest.fixture
@@ -11,7 +12,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_PASSWORD,
     )
 
 
@@ -30,4 +31,3 @@ class TestAuditEventModel:
         )
         assert event.verb == 'created'
         assert event.object_type == 'Deliverable'
-
