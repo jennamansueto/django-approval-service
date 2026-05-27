@@ -1,9 +1,10 @@
 """Shared test configuration and fixtures."""
 import os
+import uuid
 
 import pytest
 
-TEST_PASSWORD = os.environ.get("TEST_USER_PASSWORD", "test-placeholder-pass")
+TEST_PASSWORD = os.environ.get("TEST_USER_PASSWORD") or f"test-{uuid.uuid4().hex[:16]}"
 
 
 @pytest.fixture
