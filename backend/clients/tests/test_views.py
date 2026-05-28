@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 from clients.models import Client
+from conftest import get_test_user_defaults
 
 
 @pytest.fixture
@@ -19,8 +20,8 @@ def admin_user():
     return User.objects.create_user(
         username='admin',
         email='admin@example.com',
-        password='testpass123',
         role=User.ADMIN,
+        **get_test_user_defaults(),
     )
 
 
@@ -41,4 +42,3 @@ class TestClientViewSet:
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
         assert response.data[0]['name'] == 'Test Client'
-

@@ -5,6 +5,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 from audit.models import AuditEvent
+from conftest import get_test_user_defaults
 
 
 @pytest.fixture
@@ -19,7 +20,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        **get_test_user_defaults(),
     )
 
 
@@ -44,4 +45,3 @@ class TestAuditEventViewSet:
         response = api_client.get('/api/audit/')
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data) == 1
-
