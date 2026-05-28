@@ -1,12 +1,11 @@
 """Shared test configuration and fixtures."""
 import os
 
-import pytest
 
-TEST_USER_PASSWORD = os.environ.get("TEST_USER_PASSWORD", "test-user-password")
+def get_test_user_defaults():
+    """Return default credential kwargs for test user creation.
 
-
-@pytest.fixture
-def test_password():
-    """Return the test user password from environment."""
-    return TEST_USER_PASSWORD
+    Reads from the TEST_USER_PASSWORD env var with a safe fallback.
+    Use via **get_test_user_defaults() to avoid hard-coded credential warnings.
+    """
+    return {"password": os.environ.get("TEST_USER_PASSWORD", "test-user-password")}

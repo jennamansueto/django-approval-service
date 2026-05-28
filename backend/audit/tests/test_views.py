@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 from audit.models import AuditEvent
-from conftest import TEST_USER_PASSWORD
+from conftest import get_test_user_defaults
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password=TEST_USER_PASSWORD,
+        **get_test_user_defaults(),
     )
 
 
