@@ -8,7 +8,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 
-TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
+TEST_CREDENTIAL = os.getenv("DJANGO_TEST_CREDENTIAL") or "testpass123"
 
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_CREDENTIAL,
         role=User.PLANNER,
     )
 
@@ -36,7 +36,7 @@ class TestLoginView:
         """Test successful login."""
         response = api_client.post(
             reverse('accounts:login'),
-            {'username': 'testuser', 'password': TEST_PASSWORD},
+            {'username': 'testuser', 'password': TEST_CREDENTIAL},
             format='json',
         )
         assert response.status_code == status.HTTP_200_OK

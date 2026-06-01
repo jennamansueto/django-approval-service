@@ -10,7 +10,7 @@ from approvals.models import ApprovalRequest, ApprovalStep
 from clients.models import Client
 from deliverables.models import Deliverable
 
-TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
+TEST_CREDENTIAL = os.getenv("DJANGO_TEST_CREDENTIAL") or "testpass123"
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def approver_user():
     return User.objects.create_user(
         username='approver',
         email='approver@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_CREDENTIAL,
         role=User.APPROVER,
     )
 
@@ -36,7 +36,7 @@ def planner_user():
     return User.objects.create_user(
         username='planner',
         email='planner@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_CREDENTIAL,
         role=User.PLANNER,
     )
 
