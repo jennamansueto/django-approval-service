@@ -1,10 +1,14 @@
 """Tests for clients views."""
+import os
+
 import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
 from clients.models import Client
+
+TEST_CREDENTIAL = os.getenv("DJANGO_TEST_CREDENTIAL") or "testpass123"
 
 
 @pytest.fixture
@@ -19,7 +23,7 @@ def admin_user():
     return User.objects.create_user(
         username='admin',
         email='admin@example.com',
-        password='testpass123',
+        password=TEST_CREDENTIAL,
         role=User.ADMIN,
     )
 

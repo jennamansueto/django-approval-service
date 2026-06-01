@@ -1,8 +1,12 @@
 """Tests for audit models."""
+import os
+
 import pytest
 
 from accounts.models import User
 from audit.models import AuditEvent
+
+TEST_CREDENTIAL = os.getenv("DJANGO_TEST_CREDENTIAL") or "testpass123"
 
 
 @pytest.fixture
@@ -11,7 +15,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_CREDENTIAL,
     )
 
 
