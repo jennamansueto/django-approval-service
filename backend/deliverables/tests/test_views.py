@@ -9,7 +9,7 @@ from accounts.models import User
 from clients.models import Client
 from deliverables.models import Deliverable
 
-TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
+TEST_CREDENTIAL = os.getenv("DJANGO_TEST_CREDENTIAL") or "testpass123"
 
 
 @pytest.fixture
@@ -24,7 +24,7 @@ def planner_user():
     return User.objects.create_user(
         username='planner',
         email='planner@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_CREDENTIAL,
         role=User.PLANNER,
     )
 
@@ -35,7 +35,7 @@ def viewer_user():
     return User.objects.create_user(
         username='viewer',
         email='viewer@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_CREDENTIAL,
         role=User.VIEWER,
     )
 

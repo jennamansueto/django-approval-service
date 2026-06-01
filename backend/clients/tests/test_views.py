@@ -8,7 +8,7 @@ from rest_framework.test import APIClient
 from accounts.models import User
 from clients.models import Client
 
-TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
+TEST_CREDENTIAL = os.getenv("DJANGO_TEST_CREDENTIAL") or "testpass123"
 
 
 @pytest.fixture
@@ -23,7 +23,7 @@ def admin_user():
     return User.objects.create_user(
         username='admin',
         email='admin@example.com',
-        password=TEST_PASSWORD,
+        password=TEST_CREDENTIAL,
         role=User.ADMIN,
     )
 
