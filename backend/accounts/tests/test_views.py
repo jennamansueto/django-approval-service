@@ -1,10 +1,14 @@
 """Tests for accounts views."""
+import secrets
+
 import pytest
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
+
+TEST_USER_PASSWORD = secrets.token_urlsafe(20)
 
 
 @pytest.fixture
@@ -19,7 +23,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_USER_PASSWORD,
         role=User.PLANNER,
     )
 
@@ -32,7 +36,7 @@ class TestLoginView:
         """Test successful login."""
         response = api_client.post(
             reverse('accounts:login'),
-            {'username': 'testuser', 'password': 'testpass123'},
+            {'username': 'testuser', 'password': TEST_USER_PASSWORD},
             format='json',
         )
         assert response.status_code == status.HTTP_200_OK
