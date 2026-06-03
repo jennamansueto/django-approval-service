@@ -1,5 +1,5 @@
 """Tests for approvals views."""
-import os
+import secrets
 
 import pytest
 from rest_framework import status
@@ -10,7 +10,7 @@ from approvals.models import ApprovalRequest, ApprovalStep
 from clients.models import Client
 from deliverables.models import Deliverable
 
-TEST_USER_PASSWORD = os.environ.get('TEST_USER_PASSWORD', 'testpass123')
+TEST_USER_PASSWORD = secrets.token_urlsafe(20)
 
 
 @pytest.fixture

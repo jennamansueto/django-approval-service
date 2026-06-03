@@ -1,5 +1,5 @@
 """Tests for accounts views."""
-import os
+import secrets
 
 import pytest
 from django.urls import reverse
@@ -8,7 +8,7 @@ from rest_framework.test import APIClient
 
 from accounts.models import User
 
-TEST_USER_PASSWORD = os.environ.get('TEST_USER_PASSWORD', 'testpass123')
+TEST_USER_PASSWORD = secrets.token_urlsafe(20)
 
 
 @pytest.fixture
