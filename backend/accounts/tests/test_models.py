@@ -1,7 +1,11 @@
 """Tests for accounts models."""
+import os
+
 import pytest
 
 from accounts.models import User
+
+TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
 
 
 @pytest.mark.django_db
@@ -13,7 +17,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
-            password='testpass123',
+            password=TEST_PASSWORD,
         )
         assert user.username == 'testuser'
         assert user.email == 'test@example.com'
@@ -24,7 +28,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='planner',
             email='planner@example.com',
-            password='testpass123',
+            password=TEST_PASSWORD,
             role=User.PLANNER,
         )
         assert user.role == User.PLANNER
@@ -34,7 +38,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='admin',
             email='admin@example.com',
-            password='testpass123',
+            password=TEST_PASSWORD,
             role=User.ADMIN,
         )
         assert str(user) == 'admin (ADMIN)'
