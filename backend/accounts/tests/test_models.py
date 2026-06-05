@@ -5,7 +5,7 @@ import pytest
 
 from accounts.models import User
 
-TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
+TEST_PASSWORD = os.environ["DJANGO_TEST_PASSWORD"]
 
 
 @pytest.mark.django_db
