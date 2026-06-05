@@ -6,7 +6,7 @@ import pytest
 from accounts.models import User
 from audit.models import AuditEvent
 
-TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
+TEST_PASSWORD = os.environ["DJANGO_TEST_PASSWORD"]
 
 
 @pytest.fixture
