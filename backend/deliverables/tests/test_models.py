@@ -7,7 +7,7 @@ from accounts.models import User
 from clients.models import Client
 from deliverables.models import Deliverable
 
-TEST_PASSWORD = os.environ.get("DJANGO_TEST_PASSWORD", "testpass123")
+TEST_PASSWORD = os.environ["DJANGO_TEST_PASSWORD"]
 
 
 @pytest.fixture
