@@ -14,12 +14,12 @@ def api_client():
 
 
 @pytest.fixture
-def admin_user():
+def admin_user(test_user_password):
     """Create an admin user."""
     return User.objects.create_user(
         username='admin',
         email='admin@example.com',
-        password='testpass123',
+        password=test_user_password,
         role=User.ADMIN,
     )
 

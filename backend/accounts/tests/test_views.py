@@ -14,12 +14,12 @@ def api_client():
 
 
 @pytest.fixture
-def user():
+def user(test_user_password):
     """Create a test user."""
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=test_user_password,
         role=User.PLANNER,
     )
 
@@ -28,11 +28,11 @@ def user():
 class TestLoginView:
     """Tests for login endpoint."""
 
-    def test_login_success(self, api_client, user):
+    def test_login_success(self, api_client, user, test_user_password):
         """Test successful login."""
         response = api_client.post(
             reverse('accounts:login'),
-            {'username': 'testuser', 'password': 'testpass123'},
+            {'username': 'testuser', 'password': test_user_password},
             format='json',
         )
         assert response.status_code == status.HTTP_200_OK
