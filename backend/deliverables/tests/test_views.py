@@ -15,23 +15,23 @@ def api_client():
 
 
 @pytest.fixture
-def planner_user():
+def planner_user(test_user_password):
     """Create a planner user."""
     return User.objects.create_user(
         username='planner',
         email='planner@example.com',
-        password='testpass123',
+        password=test_user_password,
         role=User.PLANNER,
     )
 
 
 @pytest.fixture
-def viewer_user():
+def viewer_user(test_user_password):
     """Create a viewer user."""
     return User.objects.create_user(
         username='viewer',
         email='viewer@example.com',
-        password='testpass123',
+        password=test_user_password,
         role=User.VIEWER,
     )
 
