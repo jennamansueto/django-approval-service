@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
+from conftest import TEST_PASSWORD
 
 
 @pytest.fixture
@@ -19,7 +20,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_PASSWORD,
         role=User.PLANNER,
     )
 
@@ -32,7 +33,7 @@ class TestLoginView:
         """Test successful login."""
         response = api_client.post(
             reverse('accounts:login'),
-            {'username': 'testuser', 'password': 'testpass123'},
+            {'username': 'testuser', 'password': TEST_PASSWORD},
             format='json',
         )
         assert response.status_code == status.HTTP_200_OK

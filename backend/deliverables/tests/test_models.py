@@ -2,6 +2,7 @@
 import pytest
 
 from accounts.models import User
+from conftest import TEST_PASSWORD
 from clients.models import Client
 from deliverables.models import Deliverable
 
@@ -12,7 +13,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_PASSWORD,
     )
 
 
