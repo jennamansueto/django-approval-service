@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from accounts.models import User
-from conftest import TEST_USER_PASSWORD
+from conftest import TEST_USER_AUTH
 from audit.models import AuditEvent
 
 
@@ -20,7 +20,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password=TEST_USER_PASSWORD,
+        password=TEST_USER_AUTH,
     )
 
 

@@ -2,7 +2,7 @@
 import pytest
 
 from accounts.models import User
-from conftest import TEST_USER_PASSWORD
+from conftest import TEST_USER_AUTH
 
 
 @pytest.mark.django_db
@@ -14,7 +14,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='testuser',
             email='test@example.com',
-            password=TEST_USER_PASSWORD,
+            password=TEST_USER_AUTH,
         )
         assert user.username == 'testuser'
         assert user.email == 'test@example.com'
@@ -25,7 +25,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='planner',
             email='planner@example.com',
-            password=TEST_USER_PASSWORD,
+            password=TEST_USER_AUTH,
             role=User.PLANNER,
         )
         assert user.role == User.PLANNER
@@ -35,7 +35,7 @@ class TestUserModel:
         user = User.objects.create_user(
             username='admin',
             email='admin@example.com',
-            password=TEST_USER_PASSWORD,
+            password=TEST_USER_AUTH,
             role=User.ADMIN,
         )
         assert str(user) == 'admin (ADMIN)'
