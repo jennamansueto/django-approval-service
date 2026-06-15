@@ -2,6 +2,7 @@
 import pytest
 
 from accounts.models import User
+from conftest import TEST_USER_AUTH
 from audit.models import AuditEvent
 
 
@@ -11,7 +12,7 @@ def user():
     return User.objects.create_user(
         username='testuser',
         email='test@example.com',
-        password='testpass123',
+        password=TEST_USER_AUTH,
     )
 
 
